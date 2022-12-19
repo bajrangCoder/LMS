@@ -2,6 +2,7 @@ import customtkinter
 import tkinter
 from database import LMS
 from tkinter.messagebox import showerror, showwarning, showinfo
+from tkcalendar import DateEntry
 
 db = LMS("db/lms.db")
 
@@ -9,9 +10,9 @@ class AddBook(customtkinter.CTk):
     def __init__(self):
         super().__init__()
         self.title("Library Management System")
-        self.minsize(500,390)
-        self.maxsize(500,390)
-        self.geometry('500x390')
+        self.minsize(500,400)
+        self.maxsize(500,400)
+        self.geometry('500x400')
         
         heading_frame = customtkinter.CTkFrame(master=self,corner_radius=10)
         heading_frame.pack(padx=10,pady=10, ipadx=20, ipady=5,fill="x",anchor="n")
@@ -58,8 +59,11 @@ class AddBook(customtkinter.CTk):
         purchase_dt_lbel = customtkinter.CTkLabel(master=main_frame,text="Purchased Date",)
         purchase_dt_lbel.grid(column=1,row=5,padx=5, pady=5)
         
-        self.purchase_dt_inp = customtkinter.CTkEntry(master=main_frame,width=200)
-        self.purchase_dt_inp.grid(column=2,row=5,padx=5, pady=5)
+        self.purch_dt_var = customtkinter.StringVar(self)
+        self.purchase_dt = DateEntry(main_frame, width=10,borderwidth=2, year=2022, textvariable=self.purch_dt_var)
+        self.purchase_dt.grid(column=2,row=5,padx=5, pady=5)
+        #self.purchase_dt_inp = customtkinter.CTkEntry(master=main_frame,width=200)
+        #self.purchase_dt_inp.grid(column=2,row=5,padx=5, pady=5)
         
         add_new_book_btn = customtkinter.CTkButton(master=main_frame,text="Add Book", font=customtkinter.CTkFont(family="Verdana",size=16, weight="bold"),command=self.save_new_book)
         add_new_book_btn.grid(column=2,row=6,padx=10,pady=5,ipadx=10,ipady=10)
@@ -70,7 +74,7 @@ class AddBook(customtkinter.CTk):
         book_author = self.book_author_input.get()
         book_edition = self.book_edition_input.get()
         book_price = self.book_price_input.get()
-        purchase_dt = self.purchase_dt_inp.get()
+        purchase_dt = self.purch_dt_var.get()
         if book_id != "" and book_nme != "" and book_author != "" and book_edition != "" and book_price != "" and purchase_dt != "":
             data = (
                 book_id,

@@ -11,9 +11,9 @@ class BookReport(customtkinter.CTk):
     def __init__(self):
         super().__init__()
         self.title("Library Management System")
-        self.minsize(400,250)
-        self.maxsize(400,250)
-        self.geometry('400x250')
+        self.minsize(400,300)
+        self.maxsize(400,300)
+        self.geometry('400x300')
         
         heading_frame = customtkinter.CTkFrame(master=self,corner_radius=10)
         heading_frame.pack(padx=10,pady=10, ipadx=20, ipady=5,fill="x",anchor="n")
@@ -32,6 +32,9 @@ class BookReport(customtkinter.CTk):
         
         export_all_book_btn = customtkinter.CTkButton(master=main_frame,text="Export All Book",command=self.export_all_book)
         export_all_book_btn.pack(padx=10,pady=10)
+        
+        export_fine_btn = customtkinter.CTkButton(master=main_frame,text="Export Fine Details",command=self.export_fine_detail)
+        export_fine_btn.pack(padx=10,pady=10)
         
     def export_available_book(self):
         dbt = db.all_available_book()
@@ -63,3 +66,5 @@ class BookReport(customtkinter.CTk):
         except:
             showerror(title="Error", message="Location not selected...")
     
+    def export_fine_detail(self):
+        pass
