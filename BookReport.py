@@ -67,4 +67,11 @@ class BookReport(customtkinter.CTk):
             showerror(title="Error", message="Location not selected...")
     
     def export_fine_detail(self):
-        pass
+        dbt = db.fine_detail()
+        data = pd.read_sql_query(dbt[0],dbt[1])
+        try:
+            selected_folder = filedialog.askdirectory()
+            data.to_excel(f"{selected_folder}/fine_details.xlsx")
+            showinfo(title="Success",message="Exported successfully")
+        except:
+            showerror(title="Error", message="Location not selected...")

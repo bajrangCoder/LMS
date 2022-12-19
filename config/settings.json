@@ -1,6 +1,6 @@
 {
-    "theme": "System",
-    "color_theme": "blue",
+    "theme": "Dark",
+    "color_theme": "green",
     "charge_per_day": 5,
     "issue_duration": 1,
     "footer_txt": "Developed By Raunak Raj!"

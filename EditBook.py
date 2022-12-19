@@ -2,6 +2,7 @@ import customtkinter
 import tkinter
 from database import LMS
 from tkinter.messagebox import showerror, showwarning, showinfo
+from tkcalendar import DateEntry
 
 db = LMS("db/lms.db")
 
@@ -9,9 +10,9 @@ class EditBook(customtkinter.CTk):
     def __init__(self):
         super().__init__()
         self.title("Library Management System")
-        self.minsize(500,470)
-        self.maxsize(500,470)
-        self.geometry('500x470')
+        self.minsize(500,490)
+        self.maxsize(500,490)
+        self.geometry('500x490')
         
         heading_frame = customtkinter.CTkFrame(master=self,corner_radius=10)
         heading_frame.pack(padx=10,pady=10, ipadx=20, ipady=5,fill="x",anchor="n")
@@ -76,8 +77,8 @@ class EditBook(customtkinter.CTk):
         purchase_dt_lbel.grid(column=1,row=5,padx=5, pady=5)
         
         self.purchase_dt_var = customtkinter.StringVar(self)
-        self.purchase_dt_inp = customtkinter.CTkEntry(master=self.main_frame,width=200, textvariable=self.purchase_dt_var)
-        self.purchase_dt_inp.grid(column=2,row=5,padx=5, pady=5)
+        self.purchase_dt = DateEntry(self.main_frame, width=10,borderwidth=2, textvariable=self.purchase_dt_var)
+        self.purchase_dt.grid(column=2,row=5,padx=5, pady=5)
         
         update_new_book_btn = customtkinter.CTkButton(master=self.main_frame,text="Update", font=customtkinter.CTkFont(family="Verdana",size=16, weight="bold"),command=self.update_book)
         update_new_book_btn.grid(column=2,row=6,padx=10,pady=5,ipadx=10,ipady=10)

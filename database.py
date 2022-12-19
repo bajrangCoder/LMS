@@ -175,6 +175,10 @@ class LMS:
         sql="SELECT book_id, book_name, book_author, book_edition, book_price FROM books WHERE status = 'available' or status = 'issued'"
         return (sql,self.conn)
     
+    def fine_detail(self):
+        sql="SELECT * FROM fine_details"
+        return (sql,self.conn)
+    
     def move_to_miscellaneous(self,id):
         sql = '''UPDATE issued_book SET is_miscellaneous = ? WHERE book_id = ?'''
         self.cur.execute(sql,(1,id,))

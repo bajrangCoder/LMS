@@ -32,10 +32,12 @@ class DeleteBook(customtkinter.CTk):
         delete_book_btn.pack(padx=10,pady=10)
     
     def delete_book(self):
-        res = db.delete_book(self.book_id_input.get())
-        if res == 'deleted':
-            showinfo(title="Deleted",message=f"Book ID : {self.book_id_input.get()}, deleted successfully.")
-            self.book_id_input.delete(0,'end')
+        if self.book_id_input.get() in db.all_book_id():
+            res = db.delete_book(self.book_id_input.get())
+            if res == 'deleted':
+                showinfo(title="Deleted",message=f"Book ID : {self.book_id_input.get()}, deleted successfully.")
+                self.book_id_input.delete(0,'end')
+            else:
+                showerror(title="Error",message=f"Book ID : {self.book_id_input.get()}, not deleted. Try Again!")
         else:
-            showerror(title="Error",message=f"Book ID : {self.book_id_input.get()}, not deleted. Try Again!")
-        
+            showerror(title="Not Found",message="Book not found")
