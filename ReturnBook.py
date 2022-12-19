@@ -32,7 +32,7 @@ class ReturnBook(customtkinter.CTk):
         book_id_lbel = customtkinter.CTkLabel(master=main_frame,text="Book ID",font=customtkinter.CTkFont(family="Verdana",size=16, weight="normal"))
         book_id_lbel.pack(pady=10)
         
-        self.book_id_var = customtkinter.IntVar(self)
+        self.book_id_var = customtkinter.StringVar(self)
         self.book_id_input = customtkinter.CTkEntry(master=main_frame, width=200, textvariable=self.book_id_var)
         self.book_id_input.pack(padx=5, pady=5)
         
@@ -41,17 +41,19 @@ class ReturnBook(customtkinter.CTk):
     
     def return_book(self):
         book_id = self.book_id_var.get()
+        book_id = int(book_id)
         
         if book_id in self.all_book_id():
             status = 'issued'
             if status in db.select_book_status(book_id):
-                exp_dt = db.select_expiry_dt(book_id)
+                book_detl = db.select_issued_bool_det(book_id)
                 
-                std_exp_dt = datetime.datetime.strptime(exp_dt[0], "%Y-%m-%d %H:%M:%S")
+                std_exp_dt = datetime.datetime.strptime(book_detl[2], "%Y-%m-%d %H:%M:%S")
                 if std_exp_dt < datetime.datetime.now():
                     fine = self.total_fine(std_exp_dt)
-                    conf = askyesno(title="Fine Confirmation",message=f"Student is fined, {fine[0]} for {fine[1]} days extra. Is Student paid?")
+                    conf = askyesno(title="Fine Confirmation",message=f"Student is fined, {fine[0]} for {fine[1]} days extra. Is Student submitted fine?")
                     if conf:
+                        self.save_fine_details(book_detl[0],book_detl[1],book_detl[2],fine)
                         self.return_book_func(book_id)
                     else:
                         misl_conf = askyesno(title="Miscellaneous", message="Do you want to put this book in Miscellaneous type?")
@@ -90,3 +92,17 @@ class ReturnBook(customtkinter.CTk):
         delta = datetime.datetime.now() - exp_dt
         total_fine = delta.days * self.charge_per_day
         return (total_fine, delta.days)
+    
+    def save_fine_details(self,book_id,student_id,issued_dt,fine):
+        dt = datetime.datetime.now()
+        std_dt = dt.isoformat(' ', 'seconds')
+        data = (
+            book_id,
+            student_id,
+            issued_dt,
+            std_exp_dt,
+            fine[0],
+            fine[1]
+        )
+        res = db.save_fine_detail(data)
+    

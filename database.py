@@ -155,8 +155,12 @@ class LMS:
         self.cur.execute("SELECT status FROM books WHERE book_id=?", (book_id,))
         return self.cur.fetchone()
     
-    def select_expiry_dt(self,book_id):
-        self.cur.execute("SELECT expired_on FROM issued_book WHERE book_id=?", (book_id,))
+    def select_issued_book_det(self,book_id):
+        self.cur.execute("SELECT * FROM issued_book WHERE book_id=?", (book_id,))
+        return self.cur.fetchone()
+    
+    def select_book_detail(self,book_id):
+        self.cur.execute("SELECT * FROM books WHERE book_id=?", (book_id,))
         return self.cur.fetchone()
     
     def all_available_book(self):
@@ -168,7 +172,7 @@ class LMS:
         return (sql,self.conn)
     
     def all_books(self):
-        sql="SELECT book_id, book_name, book_author, book_edition, book_price FROM books"
+        sql="SELECT book_id, book_name, book_author, book_edition, book_price FROM books WHERE status = 'available' or status = 'issued'"
         return (sql,self.conn)
     
     def move_to_miscellaneous(self,id):
@@ -176,3 +180,14 @@ class LMS:
         self.cur.execute(sql,(1,id,))
         self.conn.commit()
     
+    def update_book_details(self,data):
+        sql = '''UPDATE books SET book_id = ?,book_name = ?,book_author = ?,book_edition = ?,book_price = ?,date_of_purchase = ? WHERE book_id = ?'''
+        self.cur.execute(sql,data)
+        self.conn.commit()
+    
+    def save_fine_detail(self,data):
+        sql = '''INSERT INTO fine_details(book_id,student_id,issued_on,returned_date,total_fine,no_of_day)
+            VALUES(?,?,?,?,?,?)'''
+        self.cur.execute(sql, data)
+        self.conn.commit()
+        return self.cur.lastrowid

@@ -66,6 +66,24 @@ def main():
                                     class text NOT NULL
                                 );"""
     
+    sql_create_tasks2_table = """CREATE TABLE IF NOT EXISTS fine_details (
+                                    book_id integer,
+                                    student_id integer,
+                                    issued_on DATETIME NOT NULL,
+                                    returned_date DATETIME NOT NULL,
+                                    total_fine integer,
+                                    no_of_day integer,
+                                    FOREIGN KEY (book_id)
+                                    REFERENCES books (book_id)
+                                        ON UPDATE CASCADE
+                                        ON DELETE CASCADE
+                                    FOREIGN KEY (student_id)
+                                    REFERENCES student (id)
+                                        ON UPDATE CASCADE
+                                        ON DELETE CASCADE
+                                );"""
+    
+    
     # create a database connection
     conn = create_connection(database)
 
@@ -77,6 +95,7 @@ def main():
         # create tasks table
         create_table(conn, sql_create_tasks_table)
         create_table(conn, sql_create_tasks1_table)
+        create_table(conn, sql_create_tasks2_table)
     else:
         print("Error! cannot create the database connection.")
 

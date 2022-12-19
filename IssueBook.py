@@ -2,9 +2,9 @@ import customtkinter
 import tkinter
 from database import LMS
 from tkinter.messagebox import showerror, showinfo
+from tkinter import ttk
 import datetime
 import json
-
 
 db = LMS("db/lms.db")
 
@@ -36,14 +36,13 @@ class IssueBook(customtkinter.CTk):
         book_id_lbel = customtkinter.CTkLabel(master=main_frame,text="Book ID")
         book_id_lbel.grid(column=1,row=0,padx=5, pady=5)
         
-        self.book_id_var = customtkinter.IntVar(self)
+        self.book_id_var = customtkinter.StringVar(self)
         self.book_id_input = customtkinter.CTkEntry(master=main_frame, width=200,textvariable=self.book_id_var)
         self.book_id_input.grid(column=2,row=0,padx=5, pady=10)
         
         student_id_lbel = customtkinter.CTkLabel(master=main_frame,text="Student ID")
         student_id_lbel.grid(column=1,row=1,padx=5, pady=5)
-        
-        self.student_id_var = customtkinter.IntVar(self)
+        self.student_id_var = customtkinter.StringVar(self)
         self.student_id_input = customtkinter.CTkEntry(master=main_frame, width=200, textvariable=self.student_id_var)
         self.student_id_input.grid(column=2,row=1,padx=5, pady=5)
         
@@ -52,7 +51,9 @@ class IssueBook(customtkinter.CTk):
     
     def issue_book(self):
         book_id = self.book_id_var.get()
+        book_id = int(book_id)
         student_id = self.student_id_var.get()
+        student_id = int(student_id)
         
         if book_id in self.all_book_id() and student_id in self.all_student_id():
             status = 'available'

@@ -1,6 +1,7 @@
 import tkinter
 import customtkinter
 from AddBook import *
+from EditBook import *
 from DeleteBook import *
 from ViewBooks import *
 from IssueBook import *
@@ -9,6 +10,7 @@ from BookReport import *
 from Miscellaneous import *
 from PIL import ImageTk
 import json
+from tkinter import filedialog
 
 with open("config/settings.json", "r") as settings_file:
     settings = json.load(settings_file)
@@ -112,10 +114,10 @@ class LMSApp(customtkinter.CTk):
     def __init__(self):
         super().__init__()
         self.title("Library Management System")
-        self.minsize(600,400)
-        self.maxsize(600,400)
-        self.geometry('600x400')
-        icon_path = ImageTk.PhotoImage(file="logo.png")
+        self.minsize(600,430)
+        self.maxsize(600,430)
+        self.geometry('600x430')
+        icon_path = ImageTk.PhotoImage(file="new_logo.png")
         self.iconphoto(False, icon_path)
         
         heading_frame = customtkinter.CTkFrame(master=self,corner_radius=10)
@@ -149,14 +151,20 @@ class LMSApp(customtkinter.CTk):
         button_5 = customtkinter.CTkButton(master=right_frame,text="Return Book",corner_radius=3, command=self.return_book_win)
         button_5.pack(padx=20, pady=10)
         
-        button_6 = customtkinter.CTkButton(master=right_frame,text="Book Report",corner_radius=3, command=self.book_report_win)
+        button_6 = customtkinter.CTkButton(master=right_frame,text="Report",corner_radius=3, command=self.book_report_win)
         button_6.pack(padx=20, pady=10)
         
         button_7 = customtkinter.CTkButton(master=right_frame,text="Miscellaneous",corner_radius=3, command=self.miscellaneous_case_win)
         button_7.pack(padx=20, pady=10)
         
-        button_8 = customtkinter.CTkButton(master=left_frame,text="Setting",corner_radius=3,command=self.settings_win)
+        button_8 = customtkinter.CTkButton(master=left_frame,text="Edit Book",corner_radius=3, command=self.edit_book_win)
         button_8.pack(padx=20, pady=10)
+        
+        button_9 = customtkinter.CTkButton(master=left_frame,text="Setting",corner_radius=3,fg_color='#cc0a0a',command=self.settings_win)
+        button_9.pack(padx=20, pady=10)
+        
+        button_10 = customtkinter.CTkButton(master=right_frame,text="Import Student",corner_radius=3,command=self.import_student)
+        button_10.pack(padx=20, pady=10)
         
         footer_frame = customtkinter.CTkFrame(master=self,corner_radius=8,fg_color="#f55d5d")
         footer_frame.pack(padx=20,pady=10,fill="x",anchor="s")
@@ -165,6 +173,10 @@ class LMSApp(customtkinter.CTk):
     
     def add_book_win(self):
         app = AddBook()
+        app.mainloop()
+    
+    def edit_book_win(self):
+        app = EditBook()
         app.mainloop()
     
     def delete_book_win(self):
@@ -194,6 +206,20 @@ class LMSApp(customtkinter.CTk):
     def settings_win(self):
         app = Setting()
         app.mainloop()
+    
+    def import_student(self):
+        try:
+            filetypes = (
+                ('exel files', '*.xlsx'),
+            )
+            file = filedialog.askopenfilename(title="Import Students",filetypes=filetypes)
+            res = db.add_new_student(file)
+            if res != None:
+                showinfo(title="Success",message="Students imported successfully")
+            else:
+                showerror(title="Error",message="Something went wrong. Try Again!")
+        except:
+            showerror(title="Error",message="File is not in correct form or file not selected")
 
 if __name__ == '__main__':
     app = LMSApp()
