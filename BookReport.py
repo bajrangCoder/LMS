@@ -4,12 +4,14 @@ from database import LMS
 from tkinter.messagebox import showerror, showinfo
 from tkinter import filedialog
 import pandas as pd
+import os
+import sys
 
-db = LMS("db/lms.db")
+db = LMS(os.path.join(os.path.dirname(sys.executable), "lms.db"))
 
-class BookReport(customtkinter.CTk):
-    def __init__(self):
-        super().__init__()
+class BookReport(customtkinter.CTkToplevel):
+    def __init__(self, master=None):
+        super().__init__(master)
         self.title("Library Management System")
         self.minsize(400,300)
         self.maxsize(400,300)

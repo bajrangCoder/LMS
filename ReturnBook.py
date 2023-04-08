@@ -4,16 +4,18 @@ from database import LMS
 from tkinter.messagebox import showerror, showinfo, askyesno
 import datetime
 import json
+import os
+import sys
 
-db = LMS("db/lms.db")
+db = LMS(os.path.join(os.path.dirname(sys.executable), "lms.db"))
 
-with open("config/settings.json", "r") as settings_file:
+settings_file_path = os.path.join(os.path.dirname(sys.executable), 'settings.json')
+with open(settings_file_path, "r") as settings_file:
     settings = json.load(settings_file)
 
-
-class ReturnBook(customtkinter.CTk):
-    def __init__(self):
-        super().__init__()
+class ReturnBook(customtkinter.CTkToplevel):
+    def __init__(self, master=None):
+        super().__init__(master)
         self.title("Library Management System")
         self.minsize(400,250)
         self.maxsize(400,250)
@@ -46,7 +48,7 @@ class ReturnBook(customtkinter.CTk):
         if book_id in self.all_book_id():
             status = 'issued'
             if status in db.select_book_status(book_id):
-                book_detl = db.select_issued_bool_det(book_id)
+                book_detl = db.select_issued_book_det(book_id)
                 
                 std_exp_dt = datetime.datetime.strptime(book_detl[2], "%Y-%m-%d %H:%M:%S")
                 if std_exp_dt < datetime.datetime.now():
@@ -100,7 +102,7 @@ class ReturnBook(customtkinter.CTk):
             book_id,
             student_id,
             issued_dt,
-            std_exp_dt,
+            std_dt,
             fine[0],
             fine[1]
         )

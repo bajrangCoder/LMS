@@ -32,7 +32,7 @@ def create_table(conn, create_table_sql):
 
 
 def main():
-    database = r"/sdcard/Codes/LMS/db/lms.db"
+    database = "./lms.db"
 
     sql_create_projects_table = """ CREATE TABLE IF NOT EXISTS books (
                                         book_id integer PRIMARY KEY,

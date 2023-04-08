@@ -4,18 +4,19 @@ from tkinter import ttk
 from database import LMS
 from tkinter.messagebox import showinfo
 import datetime
+import os
+import sys
+
+db = LMS(os.path.join(os.path.dirname(sys.executable), "lms.db"))
 
 
-db = LMS("db/lms.db")
-
-
-class ViewBooks(customtkinter.CTk):
-    def __init__(self):
-        super().__init__()
+class ViewBooks(customtkinter.CTkToplevel):
+    def __init__(self, master=None):
+        super().__init__(master)
         self.title("Library Management System")
-        self.minsize(1450,450)
-        self.maxsize(1450,450)
-        self.geometry('1450x450')
+        self.minsize(1300,450)
+        self.maxsize(1300,450)
+        self.geometry('1300x450')
         
         heading_frame = customtkinter.CTkFrame(master=self,corner_radius=10)
         heading_frame.pack(padx=10,pady=10, ipadx=20, ipady=5,fill="x",anchor="n")

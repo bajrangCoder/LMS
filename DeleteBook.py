@@ -2,12 +2,14 @@ import customtkinter
 import tkinter
 from database import LMS
 from tkinter.messagebox import showerror, showinfo
+import os
+import sys
 
-db = LMS("db/lms.db")
+db = LMS(os.path.join(os.path.dirname(sys.executable), "lms.db"))
 
-class DeleteBook(customtkinter.CTk):
-    def __init__(self):
-        super().__init__()
+class DeleteBook(customtkinter.CTkToplevel):
+    def __init__(self, master=None):
+        super().__init__(master)
         self.title("Library Management System")
         self.minsize(400,250)
         self.maxsize(400,250)
@@ -32,7 +34,9 @@ class DeleteBook(customtkinter.CTk):
         delete_book_btn.pack(padx=10,pady=10)
     
     def delete_book(self):
-        if self.book_id_input.get() in db.all_book_id():
+        id_lists = db.all_book_id()
+        new_id_lists = [t[0] for t in id_lists]
+        if int(self.book_id_input.get()) in new_id_lists:
             res = db.delete_book(self.book_id_input.get())
             if res == 'deleted':
                 showinfo(title="Deleted",message=f"Book ID : {self.book_id_input.get()}, deleted successfully.")

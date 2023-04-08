@@ -8,19 +8,22 @@ from IssueBook import *
 from ReturnBook import *
 from BookReport import *
 from Miscellaneous import *
-from PIL import ImageTk
 import json
 from tkinter import filedialog
+from tkinter.messagebox import askokcancel
+import os
+import sys
 
-with open("config/settings.json", "r") as settings_file:
+settings_file_path = os.path.join(os.path.dirname(sys.executable), 'settings.json')
+with open(settings_file_path, "r") as settings_file:
     settings = json.load(settings_file)
 
 customtkinter.set_appearance_mode(settings["theme"])
 customtkinter.set_default_color_theme(settings["color_theme"])
 
-class Setting(customtkinter.CTk):
-    def __init__(self):
-        super().__init__()
+class Setting(customtkinter.CTkToplevel):
+    def __init__(self, master=None):
+        super().__init__(master)
         self.title("Library Management System")
         self.minsize(300,450)
         self.maxsize(300,450)
@@ -69,32 +72,35 @@ class Setting(customtkinter.CTk):
         
         self.save_setting = customtkinter.CTkButton(master=self.main_frame, text="Save",command=self.save_settings)
         self.save_setting.grid(column=2,row=6,padx=5,pady=5)
+
+        watermark = customtkinter.CTkLabel(master=self,text="Developed By Raunak Raj")
+        watermark.pack(padx=10,pady=5, ipadx=5, ipady=5,fill="x",expand=True)
         
     def change_theme(self, new_theme_mode:str):
         settings["theme"] = new_theme_mode
-        f = open("config/settings.json","w")
+        f = open("settings.json","w")
         json.dump(settings,f,indent=4)
         customtkinter.set_appearance_mode(new_theme_mode)
     
     def change_theme_color(self, new_theme_color:str):
         settings["color_theme"] = new_theme_color
-        f = open("config/settings.json","w")
+        f = open("settings.json","w")
         json.dump(settings,f,indent=4)
         customtkinter.set_default_color_theme(new_theme_color)
     
     def change_issue_duration(self, issue_dur):
         settings["issue_duration"] = issue_dur
-        f = open("config/settings.json","w")
+        f = open("settings.json","w")
         json.dump(settings,f,indent=4)
     
     def change_charge_per_day(self, per_day_charge):
         settings["charge_per_day"] = per_day_charge
-        f = open("config/settings.json","w")
+        f = open("settings.json","w")
         json.dump(settings,f,indent=4)
     
     def change_footer_txt(self, txt):
         settings["footer_txt"] = txt
-        f = open("config/settings.json","w")
+        f = open("settings.json","w")
         json.dump(settings,f,indent=4)
     
     def save_settings(self):
@@ -117,8 +123,6 @@ class LMSApp(customtkinter.CTk):
         self.minsize(600,430)
         self.maxsize(600,430)
         self.geometry('600x430')
-        icon_path = ImageTk.PhotoImage(file="new_logo.png")
-        self.iconphoto(False, icon_path)
         
         heading_frame = customtkinter.CTkFrame(master=self,corner_radius=10)
         heading_frame.pack(padx=10,pady=10, ipadx=20, ipady=5,fill="x",anchor="n")
@@ -170,42 +174,45 @@ class LMSApp(customtkinter.CTk):
         footer_frame.pack(padx=20,pady=10,fill="x",anchor="s")
         dev_by_label = customtkinter.CTkLabel(master=footer_frame,text=settings["footer_txt"],bg_color="#f55d5d")
         dev_by_label.pack()
-    
+
+        watermark = customtkinter.CTkLabel(master=self,text="Developed By Raunak Raj")
+        watermark.place(relx = 0.7, rely = 0.9, anchor = 'sw')
+
     def add_book_win(self):
-        app = AddBook()
-        app.mainloop()
+        app = AddBook(self)
+        app.focus()
     
     def edit_book_win(self):
-        app = EditBook()
-        app.mainloop()
+        app = EditBook(self)
+        app.focus()
     
     def delete_book_win(self):
-        app = DeleteBook()
-        app.mainloop()
+        app = DeleteBook(self)
+        app.focus()
     
     def view_book_win(self):
-        app = ViewBooks()
-        app.mainloop()
+        app = ViewBooks(self)
+        app.focus()
     
     def issue_book_win(self):
-        app = IssueBook()
-        app.mainloop()
+        app = IssueBook(self)
+        app.focus()
     
     def return_book_win(self):
-        app = ReturnBook()
-        app.mainloop()
+        app = ReturnBook(self)
+        app.focus()
     
     def book_report_win(self):
-        app = BookReport()
-        app.mainloop()
+        app = BookReport(self)
+        app.focus()
     
     def miscellaneous_case_win(self):
-        app = Miscellaneous()
-        app.mainloop()
+        app = Miscellaneous(self)
+        app.focus()
     
     def settings_win(self):
-        app = Setting()
-        app.mainloop()
+        app = Setting(self)
+        app.focus()
     
     def import_student(self):
         try:

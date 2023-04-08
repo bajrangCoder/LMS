@@ -3,12 +3,14 @@ import tkinter
 from database import LMS
 from tkinter.messagebox import showerror, showwarning, showinfo
 from tkcalendar import DateEntry
+import os
+import sys
 
-db = LMS("db/lms.db")
+db = LMS(os.path.join(os.path.dirname(sys.executable), "lms.db"))
 
-class EditBook(customtkinter.CTk):
-    def __init__(self):
-        super().__init__()
+class EditBook(customtkinter.CTkToplevel):
+    def __init__(self, master=None):
+        super().__init__(master)
         self.title("Library Management System")
         self.minsize(500,490)
         self.maxsize(500,490)
